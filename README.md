@@ -2,9 +2,7 @@
 
 Running Google Mediapipe body pose tracking models on [DepthAI](https://docs.luxonis.com/en/gen2/) hardware (OAK-1, OAK-D, ...)
 
-For OpenVINO version, please visit : [openvino_blazepose](https://github.com/geaxgx/openvino_blazepose)
-
-![Demo](img/taichi.gif)
+![Demo](img/final.gif)
 ## Install
 
 Install the python packages DepthAI, Opencv, open3d with the following command:
@@ -67,9 +65,9 @@ optional arguments:
 
     ```python3 BlazeposeDepthai.py -3```
 
-- To demo gesture recognition :
+- To demo pose recognition :
 
-    ```python3 BlazeposeDepthai.py -g```
+    ```python3 BlazeposeDepthai.py -pose```
 
     This is a very basic demo that can read semaphore alphabet by measuring arm angles.
 
@@ -117,3 +115,4 @@ By default, the number of SHAVES associated with the blob files is 4. In case yo
 * Katsuya Hyodo a.k.a [Pinto](https://github.com/PINTO0309), the Wizard of Model Conversion !
 * [Tai Chi Step by Step For Beginners Training Session 4](https://www.youtube.com/watch?v=oawZ_7wNWrU&ab_channel=MasterSongKungFu)
 * [Semaphore with The RCR Museum](https://www.youtube.com/watch?v=DezaTjQYPh0&ab_channel=TheRoyalCanadianRegimentMuseum)
+* [Blazepose repository](https://github.com/geaxgx/depthai_blazepose)
