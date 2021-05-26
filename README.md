@@ -50,6 +50,7 @@ optional arguments:
   --internal_fps INTERNAL_FPS
                         Fps of internal color camera. Too high value lower NN
                         fps (default=15)
+  --pose                Enable yoga pose classification
 
 ```
 **Examples :**
