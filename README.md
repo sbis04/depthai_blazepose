@@ -1,8 +1,6 @@
 # Blazepose tracking with DepthAI
 
-Running Google Mediapipe body pose tracking models on [DepthAI](https://docs.luxonis.com/en/gen2/) hardware (OAK-1, OAK-D, ...)
-
-For OpenVINO version, please visit : [openvino_blazepose](https://github.com/geaxgx/openvino_blazepose)
+Running Google body pose tracking models on [DepthAI](https://docs.luxonis.com/en/gen2/) hardware (OAK-1, OAK-D, ...)
 
 ![Demo](img/final.gif)
 
