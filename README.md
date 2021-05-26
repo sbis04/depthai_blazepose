@@ -4,7 +4,7 @@ Running Google Mediapipe body pose tracking models on [DepthAI](https://docs.lux
 
 For OpenVINO version, please visit : [openvino_blazepose](https://github.com/geaxgx/openvino_blazepose)
 
-![Demo](img/taichi.gif)
+![Demo](img/final.gif)
 
 ## Install
 
