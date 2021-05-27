@@ -809,8 +809,8 @@ class BlazeposeDepthai:
                 cv2.putText(frame, region.gesture, (int(region.pd_box[0]*self.frame_size+10), int(region.pd_box[1]*self.frame_size-50)), 
                         cv2.FONT_HERSHEY_PLAIN, 5, (0,1190,255), 3)
             if self.use_pose and self.show_pose:
-                cv2.putText(frame, region.pose, (int(region.pd_box[0]*self.frame_size+10), int(region.pd_box[1]*self.frame_size-50)), 
-                        cv2.FONT_HERSHEY_PLAIN, 3, (0,1190,255), 3)
+                cv2.putText(frame, str(region.pose)+":" +str(region.accuracy) ,(int(region.pd_box[0]*self.frame_size+10), int(region.pd_box[1]*self.frame_size-50)), 
+                        cv2.FONT_HERSHEY_PLAIN, 2, (0,0,0), 2)
             
 
 
@@ -852,8 +852,8 @@ class BlazeposeDepthai:
 
         assert r.landmarks_abs.shape == (33, 3), 'Unexpected landmarks shape: {}'.format(r.landmarks_abs.shape)
 
-        print(r.landmarks_abs)
-        print(type(r.landmarks_abs))
+        # print(r.landmarks_abs)
+        # print(type(r.landmarks_abs))
 
         r.landmarks_abs = r.landmarks_abs.astype('float32')
 
@@ -868,11 +868,15 @@ class BlazeposeDepthai:
 
         max_sample = 0
         pose = 0
+        total=0
 
         for i in pose_classification_filtered.keys():
             if pose_classification_filtered[i]>max_sample:
                 pose = i
                 max_sample = pose_classification_filtered[i]
+                total += pose_classification_filtered[i]
+
+        r.accuracy = max_sample/total
 
         r.pose = pose
                     
