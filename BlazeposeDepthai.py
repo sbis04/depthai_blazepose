@@ -20,25 +20,61 @@ import mediapipe_utils as mpu
 from FPS import FPS, now
 from o3d_utils import create_segment, create_grid
 
-rtmp_url = "url_here"
+rtmp_url = "mux_url"
 
-fps = 20
-width = 1080
-height = 1080
+fps = 30
+width = 300
+height = 300
 
 # command and params for ffmpeg
+# command = ['ffmpeg',
+#            '-re',
+#            '-f', 'rawvideo',
+#            '-vcodec', 'rawvideo',
+#            '-s', "{}x{}".format(width, height),
+#            '-r', str(fps),  # rtsp fps (from input server)
+#            '-i', '-',
+
+#            # You can change ffmpeg parameter after this item.
+#            '-pix_fmt', 'yuv420p',
+#            '-threads', '0'
+#            '-r', '15',  # output fps
+#            '-g', '50',
+#            '-c:v', 'libx264',
+#            '-b:v', '2M',
+#            '-bufsize', '64M',
+#            '-maxrate', "4M",
+#            '-preset', 'veryfast',
+#            '-rtsp_transport', 'tcp',
+#            '-segment_times', '5',
+#            #    '-f', 'rtsp',
+#            #    rtsp_server]
+#            '-f', 'flv',
+#            rtmp_url]
+
 command = ['ffmpeg',
-           '-y',
-           '-f', 'rawvideo',
-           '-vcodec', 'rawvideo',
-           '-pix_fmt', 'bgr24',
+           '-re',
+           #    '-f', 'rawvideo',
+           #    '-vcodec', 'rawvideo',
            '-s', "{}x{}".format(width, height),
-           '-r', str(fps),
+           '-r', str(fps),  # rtsp fps (from input server)
            '-i', '-',
-           '-c:v', 'libx264',
+
+           # You can change ffmpeg parameter after this item.
            '-pix_fmt', 'yuv420p',
-           '-preset', 'fast',
+           '-r', '30',  # output fps
+           '-g', '50',
+           '-c:v', 'libx264',
+           '-b:v', '2M',
+           '-bufsize', '64M',
+           '-maxrate', "4M",
+           '-preset', 'veryfast',
+           '-rtsp_transport', 'tcp',
+           '-segment_times', '5',
+           #    '-f', 'rtsp',
+           #    rtsp_server]
            '-f', 'flv',
+           '-flvflags', 'no_duration_filesize',
            rtmp_url]
 
 muxStream = sp.Popen(command, stdin=sp.PIPE)

@@ -2,3 +2,4 @@ venv/
 .idea/
 __pycache__/
 firebase_config.py
+.DS_Store
