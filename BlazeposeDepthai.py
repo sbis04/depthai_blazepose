@@ -10,6 +10,9 @@ import numpy as np
 import open3d as o3d
 # new packages
 import pyrebase
+# import ffmpeg
+# import ffmpeg_streaming
+import subprocess as sp
 
 from firebase_config import firebaseConfig
 
@@ -17,10 +20,34 @@ import mediapipe_utils as mpu
 from FPS import FPS, now
 from o3d_utils import create_segment, create_grid
 
+rtmp_url = "url_here"
+
+fps = 20
+width = 1080
+height = 1080
+
+# command and params for ffmpeg
+command = ['ffmpeg',
+           '-y',
+           '-f', 'rawvideo',
+           '-vcodec', 'rawvideo',
+           '-pix_fmt', 'bgr24',
+           '-s', "{}x{}".format(width, height),
+           '-r', str(fps),
+           '-i', '-',
+           '-c:v', 'libx264',
+           '-pix_fmt', 'yuv420p',
+           '-preset', 'fast',
+           '-f', 'flv',
+           rtmp_url]
+
+muxStream = sp.Popen(command, stdin=sp.PIPE)
+
+
 # initialize Firebase
-firebase = pyrebase.initialize_app(firebaseConfig)
+# firebase = pyrebase.initialize_app(firebaseConfig)
 # creating an object for Realtime database
-db = firebase.database()
+# db = firebase.database()
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 POSE_DETECTION_MODEL = SCRIPT_DIR / "models/pose_detection.blob"
@@ -573,6 +600,7 @@ class BlazeposeDepthai:
             self.video_fps = internal_fps
             # Depends on cam.setResolution() in create_pipeline()
             video_height = video_width = 1080
+
         elif input_src.endswith('.jpg') or input_src.endswith('.png'):
             self.input_type = "image"
             self.img = cv2.imread(input_src)
@@ -672,6 +700,9 @@ class BlazeposeDepthai:
             cam_out.setStreamName("cam_out")
             # Link video output to host for higher resolution
             cam.video.link(cam_out.input)
+
+            # ffmpeg_streaming.input("internal").output(
+            #     "rtmps://global-live.mux.com:443/app/6299b472-c3a5-a473-2f48-4078a1718b29", format='mp4').run()
 
         # Define pose detection model
         print("Creating Pose Detection Neural Network...")
@@ -938,13 +969,13 @@ class BlazeposeDepthai:
         rounded_accuracy = round(r.lm_score, 2)
         print(rounded_accuracy)
 
-        data = {"pose": pose, "accuracy": rounded_accuracy}
+        # data = {"pose": pose, "accuracy": rounded_accuracy}
 
-        value = db.child("123").get()
-        if value.val() is None:
-            db.child("123").set(data)
-        else:
-            db.child("123").update(data)
+        # value = db.child("123").get()
+        # if value.val() is None:
+        #     db.child("123").set(data)
+        # else:
+        #     db.child("123").update(data)
 
     def run(self):
 
@@ -1070,6 +1101,10 @@ class BlazeposeDepthai:
                 self.fps.display(annotated_frame, orig=(
                     50, 50), size=1, color=(240, 180, 100))
             cv2.imshow("Blazepose", annotated_frame)
+
+            # HERE:
+            ret2, frame2 = cv2.imencode('.jpg', video_frame)
+            muxStream.stdin.write(frame2.tobytes())
 
             if self.output:
                 self.output.write(annotated_frame)
