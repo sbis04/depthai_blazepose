@@ -22,9 +22,10 @@ from o3d_utils import create_segment, create_grid
 
 rtmp_url = "mux_url"
 
-fps = 30
+fps = 15
 width = 300
 height = 300
+sizeStr = "300x300"
 
 # command and params for ffmpeg
 # command = ['ffmpeg',
@@ -56,14 +57,14 @@ command = ['ffmpeg',
            '-re',
            #    '-f', 'rawvideo',
            #    '-vcodec', 'rawvideo',
-           '-s', "{}x{}".format(width, height),
+           '-s', sizeStr,
            '-r', str(fps),  # rtsp fps (from input server)
            '-i', '-',
 
            # You can change ffmpeg parameter after this item.
            '-pix_fmt', 'yuv420p',
-           '-r', '30',  # output fps
-           '-g', '50',
+           '-r', '15',  # output fps
+           '-g', '20',
            '-c:v', 'libx264',
            '-b:v', '2M',
            '-bufsize', '64M',
@@ -534,7 +535,7 @@ class PoseClassifier(object):
         result = {class_name: class_names.count(
             class_name) for class_name in set(class_names)}
 
-        print(result)
+        # print(result)
 
         return result
 
@@ -1136,10 +1137,10 @@ class BlazeposeDepthai:
             if self.show_fps:
                 self.fps.display(annotated_frame, orig=(
                     50, 50), size=1, color=(240, 180, 100))
-            cv2.imshow("Blazepose", annotated_frame)
+            # cv2.imshow("Blazepose", annotated_frame)
 
             # HERE:
-            ret2, frame2 = cv2.imencode('.jpg', video_frame)
+            ret2, frame2 = cv2.imencode('.png', annotated_frame)
             muxStream.stdin.write(frame2.tobytes())
 
             if self.output:
